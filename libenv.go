@@ -20,7 +20,8 @@ func New() (env *Environment) {
 
 // NewFromMap returns a new instance of libenv.Environment based on the environmental variables given as argument
 func NewFromMap(envVars map[string]string) (env *Environment) {
-	env = &Environment{envVars}
+	variables := CopyStringMap(envVars)
+	env = &Environment{variables}
 
 	return
 }
@@ -66,9 +67,18 @@ func (env *Environment) Get(envVarKey string) string {
 	return env.variables[envVarKey]
 }
 
-// Set adds an environmental variable, overwriting existing if any
-func (env *Environment) Set(envVarKey string, envVar string) {
-	env.variables[envVarKey] = envVar
+// Set adds an environmental variable, overwriting existing if overwrite == true
+func (env *Environment) Set(envVarKey string, envVar string, overwrite bool) {
+	if _, exists := env.variables[envVarKey]; overwrite || !exists {
+		env.variables[envVarKey] = envVar
+	}
+}
+
+// SetMultiple adds multiple environmental variables, overwriting existing if overwrite == true
+func (env *Environment) SetMultiple(variables map[string]string, overwrite bool) {
+	for k, v := range variables {
+		env.Set(k, v, overwrite)
+	}
 }
 
 // Remove removes the environmental variable corresponsing to the key, if it exists

@@ -82,15 +82,43 @@ func TestObligatoryEnvVarsWhenSomeVariablesDoNotExist(t *testing.T) {
 
 func TestSetWorksCorrectly(t *testing.T) {
 	environment := NewFromMap(mockEnvironment)
+	if nonExisting := environment.Get("third"); nonExisting != "" {
+		t.Errorf("expected variable with key %s to be empty but got %s", "third", nonExisting)
+	}
+
+	environment.Set("third", "three", false)
+	if existing := environment.Get("third"); existing != "three" {
+		t.Errorf("expected %s but got %s", "three", existing)
+	}
+
+	environment.Set("third", "nought", false)
+	if existing := environment.Get("third"); existing != "three" {
+		t.Errorf("expected %s but got %s", "three", existing)
+	}
+
+	environment.Set("third", "nought", true)
+	if existing := environment.Get("third"); existing != "nought" {
+		t.Errorf("expected %s but got %s", "nought", existing)
+	}
+}
+
+func TestSetMultipleWorksCorrectlyWithOverwrite(t *testing.T) {
+	environment := NewFromMap(mockEnvironment)
+	variables := map[string]string{
+		"first": "some",
+		"third": "three",
+	}
 
 	if nonExisting := environment.Get("third"); nonExisting != "" {
 		t.Errorf("expected variable with key %s to be empty but got %s", "third", nonExisting)
 	}
 
-	environment.Set("third", "three")
-
+	environment.SetMultiple(variables, true)
 	if existing := environment.Get("third"); existing != "three" {
-		t.Errorf("expected %s but got %s", "three", existing)
+		t.Errorf("expected %s to be %s but got %s", "third", "three", existing)
+	}
+	if existing := environment.Get("first"); existing != "some" {
+		t.Errorf("expected %s to be %s but got %s", "first", "some", existing)
 	}
 }
 
