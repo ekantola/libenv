@@ -9,8 +9,8 @@ var mockEnvironment = map[string]string{
 	"second": "two",
 }
 
-func TestNew(t *testing.T) {
-	environment := New(mockEnvironment)
+func TestNewFromMap(t *testing.T) {
+	environment := NewFromMap(mockEnvironment)
 
 	if n := len(environment.Variables()); n != 2 {
 		t.Errorf("expected %d variables but found %d", 2, n)
@@ -18,7 +18,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestGetWhenVariableExists(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 	key, expected := "first", "one"
 
 	if envVar := environment.Get(key); envVar != expected {
@@ -27,7 +27,7 @@ func TestGetWhenVariableExists(t *testing.T) {
 }
 
 func TestGetWhenVariableDoesNotExist(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 	key, expected := "third", ""
 
 	if envVar := environment.Get(key); envVar != expected {
@@ -36,7 +36,7 @@ func TestGetWhenVariableDoesNotExist(t *testing.T) {
 }
 
 func TestGetOrDefaultWhenVariableExists(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 	key, expected := "second", "two"
 
 	if envVar := environment.GetOrDefault(key, "some"); envVar != expected {
@@ -45,7 +45,7 @@ func TestGetOrDefaultWhenVariableExists(t *testing.T) {
 }
 
 func TestGetOrDefaultWhenVariableDoesNotExist(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 	key, expected := "third", "three"
 
 	if envVar := environment.GetOrDefault(key, "three"); envVar != expected {
@@ -54,7 +54,7 @@ func TestGetOrDefaultWhenVariableDoesNotExist(t *testing.T) {
 }
 
 func TestObligatoryEnvVarsWhenAllVariablesExist(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 	envVars, err := environment.ObligatoryEnvVars("first", "second")
 
 	if err != nil {
@@ -71,7 +71,7 @@ func TestObligatoryEnvVarsWhenAllVariablesExist(t *testing.T) {
 }
 
 func TestObligatoryEnvVarsWhenSomeVariablesDoNotExist(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 	_, err := environment.ObligatoryEnvVars("first", "second", "third", "fourth")
 	expectedErrorMessage := "environmental variable error, the following environmental variables were not set: [third fourth]"
 
@@ -81,7 +81,7 @@ func TestObligatoryEnvVarsWhenSomeVariablesDoNotExist(t *testing.T) {
 }
 
 func TestSetWorksCorrectly(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 
 	if nonExisting := environment.Get("third"); nonExisting != "" {
 		t.Errorf("expected variable with key %s to be empty but got %s", "third", nonExisting)
@@ -95,7 +95,7 @@ func TestSetWorksCorrectly(t *testing.T) {
 }
 
 func TestRemoveWorksCorrectlyForAnExistingKey(t *testing.T) {
-	environment := New(mockEnvironment)
+	environment := NewFromMap(mockEnvironment)
 
 	if existing := environment.Get("first"); existing != "one" {
 		t.Errorf("expected variable with key %s to be %s but got %s", "first", "one", existing)
