@@ -1,8 +1,8 @@
 package libenv
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 func TestStringMapIsCopiedProperly(t *testing.T) {

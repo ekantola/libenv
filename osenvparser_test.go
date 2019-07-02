@@ -117,4 +117,3 @@ func TestParseEntriesWithEntryWithoutKeyAndUnsuppressedErrors(t *testing.T) {
 		t.Errorf("expected var with key %s to be \"%s\" but was \"%s\"", key, expectedValue, actualValue)
 	}
 }
-
