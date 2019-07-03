@@ -5,15 +5,16 @@ import (
 )
 
 var mockEnvironment = map[string]string{
-	"first": "one",
+	"first":  "one",
 	"second": "two",
 }
 
 func TestNewFromMap(t *testing.T) {
 	environment := NewFromMap(mockEnvironment)
+	mockEnvLen := len(mockEnvironment)
 
-	if n := len(environment.Variables()); n != 2 {
-		t.Errorf("expected %d variables but found %d", 2, n)
+	if n := len(environment.Variables()); n != mockEnvLen {
+		t.Errorf("expected %d variables but found %d", mockEnvLen, n)
 	}
 }
 

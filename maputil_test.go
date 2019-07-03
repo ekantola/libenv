@@ -14,7 +14,7 @@ func TestStringMapIsCopiedProperly(t *testing.T) {
 	copy := CopyStringMap(original)
 
 	if &copy == &original {
-		t.Errorf("expected maps to be different instances but the weren't")
+		t.Errorf("expected maps to be different instances but they weren't")
 	}
 
 	if !reflect.DeepEqual(original, copy) {

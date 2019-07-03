@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+const errorHeading = "error while parsing os environment"
+
 // ParseOsEnvironment parses operating system's environmental variables and returns them as a map
 func ParseOsEnvironment(suppressErrors bool) (envVars map[string]string, err error) {
 	environment := os.Environ()
@@ -35,25 +37,16 @@ func parseEntries(entries []string, suppressErrors bool) (envVars map[string]str
 
 func parseEnvEntry(entry string) (envKey string, envVar string, err error) {
 	keyVarPair := strings.SplitN(entry, "=", 2)
-	if k, v, valid := parsePair(keyVarPair); !valid {
-		err = fmt.Errorf("encountered illegal entry while parsing: %s", keyVarPair)
-	} else {
-		envKey, envVar = k, v
-	}
 
-	return
-}
-
-func parsePair(keyVarPair []string) (envKey string, envVar string, valid bool) {
 	if len(keyVarPair) != 2 {
-		return "", "", false
+		err = fmt.Errorf("%s: the environmental variable \"%v\" didn't contain a value", errorHeading, keyVarPair)
+		return
 	}
 
 	envKey, envVar = strings.TrimSpace(keyVarPair[0]), strings.TrimSpace(keyVarPair[1])
 	if len(envKey) < 1 {
-		return "", "", false
+		err = fmt.Errorf("%s: the key cannot be empty", errorHeading)
 	}
 
-	valid = true
 	return
 }
