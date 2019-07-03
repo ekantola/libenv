@@ -1,5 +1,5 @@
 # Libenv
-[![Build Status](https://travis-ci.org/helkasko/libenv.svg?branch=master)](https://travis-ci.org/helkasko/libenv)
+[![Build Status](https://travis-ci.org/helkasko/libenv.svg?branch=master)](https://travis-ci.org/helkasko/libenv) [![Documentation](https://godoc.org/github.com/helkasko/libenv?status.svg)](http://godoc.org/github.com/helkasko/libenv)
 
 A Go library offering functionality for handling environmental variables.
 
